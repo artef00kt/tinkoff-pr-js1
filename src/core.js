@@ -49,14 +49,10 @@ function factorial(n)
 //Напишите функцию, которая определяет, является ли число двойкой, возведенной в степень
 function isBinary(n) 
 {
-    //if (n === 0)
-    //    return false
-
     let bin = true;
     while(bin && n !== 1)
     {
         bin = !!(!(n % 2) && n);
-        //console.log(bin, typeof bin);
         n = n / 2
     }
     return bin;
@@ -89,7 +85,7 @@ function getOperationFn(initialValue, operatorFn)
 {
     let value = initialValue;
 
-    if (operatorFn === null || operatorFn === undefined)
+    if (!operatorFn)
         return function() {
             return value;
         }
@@ -121,7 +117,7 @@ function sequence(start = 0, step = 1)
     let n = start;
 
     return function() {
-        var nCurrent = n;
+        const nCurrent = n;
         n += step;
         return nCurrent;
     }
@@ -141,15 +137,14 @@ function sequence(start = 0, step = 1)
  * deepEqual({arr: [22, 33], text: 'text'}, {arr: [22, 33], text: 'text'}) // true
  * deepEqual({arr: [22, 33], text: 'text'}, {arr: [22, 3], text: 'text2'}) // false
  */
- function deepEqual(firstObject, secondObject) 
- {
-    if ((typeof firstObject !== "object")&&(typeof secondObject !== "object"))
+function deepEqual(firstObject, secondObject) 
+{
+    if ((typeof firstObject !== "object")&&(typeof secondObject !== "object") || (firstObject === null || secondObject === null))
     {
         return (firstObject === secondObject) || (typeof secondObject === "number" && typeof firstObject === "number" && isNaN(firstObject) && isNaN(secondObject));
     }
-    else if ((typeof firstObject === "object")&&(typeof secondObject === "object"))
+    else if ((typeof firstObject === "object") && (typeof secondObject === "object") && (Object.keys(firstObject).length === Object.keys(secondObject).length))
     {
-        //код
         var eqls = true;
         for (el in firstObject)
         {
@@ -157,19 +152,10 @@ function sequence(start = 0, step = 1)
             if (!eqls)
                 return false;
         }
-        for (el in secondObject)
-        {
-            eqls = deepEqual(secondObject[el], firstObject[el])
-            if (!eqls)
-                return false;
-        }
         return true;
     } 
-    else
-    {
-        return false;
-    }
- }
+    return false;
+}
 
 module.exports = {
     isInteger,
